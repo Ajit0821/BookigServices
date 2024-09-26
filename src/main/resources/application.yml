@@ -1,0 +1,25 @@
+
+server:
+  port: 8083
+spring:
+  application:
+    name: booking-service
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1/quick-cabs
+    username: postgres
+    password: 0821
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
+
