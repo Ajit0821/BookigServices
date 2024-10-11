@@ -23,3 +23,14 @@ spring:
       service-url:
         defaultZone: http://localhost:8761/eureka/
 
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: tbd
+    password: tbd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

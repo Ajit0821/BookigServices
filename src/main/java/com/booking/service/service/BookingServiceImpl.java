@@ -30,6 +30,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private DriverFeignClient driverFeignClient;
+//    @Autowired
+//    private EmailService emailService;
     List<DriverDetails> driverDetailsList;
 
 
@@ -75,17 +77,27 @@ public class BookingServiceImpl implements BookingService {
         bookingDetailsDto.setFare(savedBookingDetails.getFare());
         bookingDetailsDto.setDropoffLocation(bookingDetails.getDropoffLocation());
         bookingDetailsDto.setPickupLocation(bookingDetails.getPickupLocation());
+
+//        emailService.sendSimpleEmail("abhiofficial.1599@gmail.com", "Ride confirmation", "Your ride is confirmed!");
+
         return bookingDetailsDto;
+    }
+
+    @Override
+    public BookingDetailsDto getBookingDetails(Long bookingId) throws DriverNotFoundException {
+        BookingDetails bookingDetails = bookingRepository.findById(bookingId).orElseThrow(()->new DriverNotFoundException("Passenger Not found"));
+        return modelMapper.map(bookingDetails,BookingDetailsDto.class);
     }
 
     private DriverDetails getDriverDetails(String pickupLocation) throws Exception {
         DriverDetails driverDetails;
         driverDetails =  driverDetailsList.stream()
-                .filter(driver -> driver.getDriverCurrentLocation()
-                        .equalsIgnoreCase(pickupLocation) && driver.isAvailability_Status()).findFirst()
-                .orElseThrow(()->new DriverNotFoundException("No Driver Available"));
+//                .filter(d->
+//                pickupLocation.equalsIgnoreCase(d.getDriverCurrentLocation()) )
+//                        && d.isAvailability_Status())
+                        .findAny().orElseThrow(()->new DriverNotFoundException("No Driver Available"));
 
-        driverDetails.setAvailability_Status(false);
+//        driverDetails.setAvailability_Status(false);
         ResponseEntity<DriverDetails> response = driverFeignClient.updateDriverStatus(driverDetails.getDriverId(),driverDetails);
         return  driverDetails;
     }
