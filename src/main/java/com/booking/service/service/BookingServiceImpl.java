@@ -29,6 +29,9 @@ public class BookingServiceImpl implements BookingService {
     private ModelMapper modelMapper;
 
     @Autowired
+    ProducerKafka producerKafka;
+
+    @Autowired
     private DriverFeignClient driverFeignClient;
 //    @Autowired
 //    private EmailService emailService;
@@ -79,7 +82,7 @@ public class BookingServiceImpl implements BookingService {
         bookingDetailsDto.setPickupLocation(bookingDetails.getPickupLocation());
 
 //        emailService.sendSimpleEmail("abhiofficial.1599@gmail.com", "Ride confirmation", "Your ride is confirmed!");
-
+        producerKafka.sendBookingEvent(bookingDetails);
         return bookingDetailsDto;
     }
 
